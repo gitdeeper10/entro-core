@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "entro-core"
+version = "0.1.0"
+description = "ENTRO-CORE: Regime-Dependent Entropy-Augmented Control for Dynamical Systems"
+authors = [{name = "Samir Baladi", email = "gitdeeper@gmail.com"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.8"
+
+dependencies = []
+
+[project.urls]
+Homepage = "https://entro-core.netlify.app"
+Repository = "https://github.com/gitdeeper10/entro-core"
+
+[tool.setuptools]
+packages = ["entro_core"]

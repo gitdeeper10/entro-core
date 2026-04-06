@@ -1,0 +1,108 @@
+\documentclass[twocolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\title{Entropy-Augmented Control in Regime-Dependent Dynamical Systems}
+
+\author{Samir Baladi\\
+  \textit{Ronin Institute / Rite of Renaissance}\\
+  \texttt{gitdeeper@gmail.com}
+}
+
+\date{April 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This paper investigates the regime-dependent behavior of entropy-based control in dynamical systems. We compare PID, entropy-based nonlinear control, and a hybrid regime-switching architecture under two scenarios: an artificially unstable system and a corrected intrinsically stable system. Results demonstrate that no single controller dominates across all regimes. PID achieves optimal convergence in stable linear systems ($\Psi_{\text{final}} = 0.017$), while entropy-based control introduces mild overshoot ($\Psi_{\text{final}} = -0.239$). A hybrid switching strategy provides robust performance across regimes. These findings highlight the importance of regime-aware control design.
+\end{abstract}
+
+\section{Introduction}
+
+The EntropyLab research program comprises ten projects. ENTRO-CORE (E-LAB-03) proposes a hybrid regime-switching control architecture combining PID with entropy-based nonlinear feedback.
+
+\section{System Dynamics}
+
+The entropy state $\Psi(t)$ evolves according to:
+
+\begin{equation}
+\ddot{\Psi} = -\gamma\dot{\Psi} - k\Psi + u + \xi(t)
+\label{eq:dynamics}
+\end{equation}
+
+with damping $\gamma = 0.3$, restoring force $k = 0.5$, control input $u(t)$, and process noise $\xi(t) \sim \mathcal{N}(0, 0.05^2)$.
+
+\section{Control Laws}
+
+\subsection{PID Controller}
+\begin{equation}
+u_{\text{PID}}(t) = K_p e(t) + K_i \int e(\tau)d\tau + K_d \dot{e}(t)
+\end{equation}
+with $e(t) = -\Psi(t)$, $K_p=0.8$, $K_i=0.2$, $K_d=0.3$.
+
+\subsection{Entropy-Based Controller}
+\begin{equation}
+u_{\text{ENTRO}}(t) = w_1 \sigma(\Psi_{\text{norm}} - \theta) + w_2 \tanh(\dot\Psi) + w_3 \tanh(\ddot\Psi)
+\end{equation}
+with $w_1=0.5$, $w_2=0.3$, $w_3=0.2$, $\theta=1.4$.
+
+\subsection{Hybrid Regime-Switching Controller}
+\begin{equation}
+u(t) = \begin{cases}
+u_{\text{PID}}(t), & \Psi(t) < \Psi_{\text{th}} \\
+u_{\text{ENTRO}}(t), & \Psi(t) \ge \Psi_{\text{th}}
+\end{cases}
+\end{equation}
+with switching threshold $\Psi_{\text{th}} = 1.7$.
+
+\section{Experimental Results}
+
+Under near-critical initial conditions ($\Psi(0)=1.8$, $\dot\Psi(0)=0.3$):
+
+\begin{table}[h]
+\centering
+\caption{Terminal entropy state after 20 seconds}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Controller} & \textbf{Final $\Psi$} & \textbf{Observation} \\
+\midrule
+Uncontrolled & 0.053 & Naturally stable \\
+PID & 0.017 & Optimal convergence \\
+ENTRO-CORE & -0.239 & Mild overshoot \\
+Hybrid & -0.012 & Robust performance \\
+\bottomrule
+\end{tabular}
+\label{tab:results}
+\end{table}
+
+\section{Discussion}
+
+Key findings:
+
+\begin{enumerate}
+\item The system is intrinsically stable due to damping ($\gamma=0.3$).
+\item PID achieves the closest convergence to equilibrium ($\Psi_{\text{final}} = 0.017$).
+\item ENTRO-CORE introduces mild overshoot ($\Psi_{\text{final}} = -0.239$), indicating overcorrection.
+\item The hybrid controller provides robust performance without significant advantage over PID in this regime.
+\end{enumerate}
+
+\section{Conclusion}
+
+Entropy-based control is not universally superior to PID. Its effectiveness is regime-dependent. In stable linear systems, PID remains optimal. Future work will focus on truly unstable systems where entropy-based control may provide unique benefits.
+
+\section*{Acknowledgments}
+
+Independent research through Ronin Institute / Rite of Renaissance.
+
+\begin{thebibliography}{9}
+\bibitem{entropia} S. Baladi, ``ENTROPIA,'' E-LAB-01, Zenodo, 2026. DOI: 10.5281/zenodo.19416737
+\bibitem{entroai} S. Baladi, ``ENTRO-AI,'' E-LAB-02, Zenodo, 2026. DOI: 10.5281/zenodo.19284086
+\end{thebibliography}
+
+\end{document}

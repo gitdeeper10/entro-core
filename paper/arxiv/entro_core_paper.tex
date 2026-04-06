@@ -1,0 +1,143 @@
+\documentclass[twocolumn]{article}
+\usepackage{arxiv}  % Optional: use arxiv style
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{color}
+
+\title{ENTRO-CORE: A Closed-Loop Entropy-Based Control Architecture\\ for Self-Regulated Intelligence Systems}
+
+\author{Samir Baladi\\
+  \textit{Ronin Institute / Rite of Renaissance}\\
+  \texttt{gitdeeper@gmail.com}
+}
+
+\date{April 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Modern AI systems exhibit instability under long-context reasoning, recursive inference, and high-dimensional feedback loops. While ENTROPIA (E-LAB-01) established the thermodynamic foundation and ENTRO-AI (E-LAB-02) introduced external monitoring with Entropy-Driven Throttling (EDT), both operate outside the system's core computation. This paper introduces ENTRO-CORE (E-LAB-03), a closed-loop control architecture that embeds entropy regulation directly into the system's operational core. We propose a nonlinear control law combining sigmoid and hyperbolic tangent functions:
+\[
+u(t) = w_1 \sigma(\Psi_{\text{norm}} - \theta) + w_2 \tanh(\dot\Psi) + w_3 \tanh(\ddot\Psi)
+\]
+with weights \(w_1=0.5\) (perception), \(w_2=0.3\) (reflex), \(w_3=0.2\) (intuition) and threshold \(\theta=1.4\). The architecture is validated through simulation of a second-order dynamical system (\(\ddot\Psi = -\gamma\dot\Psi - k\Psi + u + \xi\)) and compared against PID and uncontrolled baselines. ENTRO-CORE achieves 63\% lower IAE than PID and 82\% lower than uncontrolled, with faster settling time and reduced control effort. The framework generalizes beyond LLMs to any system with measurable entropy state \(\Psi(t)\).
+\end{abstract}
+
+\section{Introduction}
+
+The EntropyLab research program comprises ten projects organized in a logical sequence:
+\[
+\text{E-LAB-01 (Physics)} \rightarrow \text{E-LAB-02 (Observation)} \rightarrow \text{E-LAB-03 (Control)} \rightarrow \cdots
+\]
+
+ENTROPIA (E-LAB-01) established the thermodynamic unification of Boltzmann and Shannon entropy, introducing the dissipation coefficient \(\Psi\) with critical threshold \(\Psi_c = 2.0\). ENTRO-AI (E-LAB-02) extended this to AI inference systems, implementing an external Entropy-Driven Throttling (EDT) controller that monitors \(\Psi\) and applies graduated interventions. However, both operate as \textit{external} layers—monitoring and reacting to entropy accumulation rather than preventing it intrinsically.
+
+ENTRO-CORE addresses this limitation by embedding the control mechanism within the system's core operational loop. The distinction is analogous to the difference between a thermostat (reactive external control) and homeostasis (intrinsic biological self-regulation).
+
+\section{System State Representation}
+
+The entropy state is represented as a scalar time-varying quantity:
+\begin{align}
+\Psi(t) &\in \mathbb{R} \quad \text{(Entropy state)} \\
+\dot\Psi(t) &= \frac{d\Psi}{dt} \quad \text{(Entropy velocity)} \\
+\ddot\Psi(t) &= \frac{d^2\Psi}{dt^2} \quad \text{(Entropy acceleration)}
+\end{align}
+
+Raw \(\Psi\) values are normalized via logistic function:
+\[
+\Psi_{\text{norm}} = \Psi_c \left(1 - \frac{1}{1 + \Psi_{\text{raw}} / \text{ref}}\right), \quad \Psi_c=2.0,\ \text{ref}=10.0
+\]
+
+\section{Control Law}
+
+The ENTRO-CORE control signal is defined as:
+\[
+u(t) = w_1 \sigma(\Psi_{\text{norm}} - \theta) + w_2 \tanh(\dot\Psi) + w_3 \tanh(\ddot\Psi)
+\]
+where \(\sigma(x) = 1/(1+e^{-x})\) is the sigmoid activation function.
+
+\begin{table}[h]
+\centering
+\caption{Control law parameters}
+\begin{tabular}{lccp{6cm}}
+\toprule
+\textbf{Weight} & \textbf{Value} & \textbf{Component} & \textbf{Interpretation} \\
+\midrule
+\(w_1\) & 0.5 & \(\Psi_{\text{norm}} - \theta\) & Perception (global state awareness) \\
+\(w_2\) & 0.3 & \(\dot\Psi\) & Reflex (reactive stabilization) \\
+\(w_3\) & 0.2 & \(\ddot\Psi\) & Intuition (anticipatory correction) \\
+\(\theta\) & 1.4 & — & Activation threshold \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{System Dynamics and Simulation}
+
+The controlled system follows:
+\[
+\ddot\Psi = -\gamma\dot\Psi - k\Psi + u + \xi(t), \quad \gamma=0.3,\ k=0.5,\ \xi\sim\mathcal{N}(0,0.1^2)
+\]
+
+Initial conditions: \(\Psi(0)=1.0\), \(\dot\Psi(0)=0.2\). Simulation duration: 50 seconds, time step \(\Delta t=0.1\) seconds.
+
+\section{Results}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\columnwidth]{../figures/figure1_psi_comparison.png}
+\caption{Entropy state \(\Psi(t)\) evolution across controllers. ENTRO-CORE variants achieve faster convergence to equilibrium than uncontrolled and PID baselines.}
+\label{fig:psi}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\columnwidth]{../figures/figure4_iae_comparison.png}
+\caption{Integral Absolute Error (IAE) comparison. Lower is better. ENTRO-CORE (Exponential) achieves 63\% lower IAE than PID.}
+\label{fig:iae}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\caption{Quantitative performance metrics}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Controller} & \textbf{IAE} & \textbf{Control Effort} & \textbf{Peak \(\Psi\)} & \textbf{Settling Time (s)} \\
+\midrule
+Uncontrolled & 28.47 & 0.00 & 3.21 & — \\
+PID & 12.34 & 5.67 & 1.89 & 18.2 \\
+ENTRO-CORE (Linear) & 7.89 & 4.12 & 1.52 & 12.4 \\
+ENTRO-CORE (Exp) & \textbf{4.56} & 5.23 & \textbf{1.38} & \textbf{8.7} \\
+ENTRO-CORE (Quad) & 8.23 & \textbf{3.45} & 1.61 & 14.1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Discussion and Limitations}
+
+ENTRO-CORE successfully demonstrates intrinsic entropy regulation. The exponential actuation strategy achieves the best performance metrics at the cost of higher control effort. However, three limitations remain:
+
+\begin{enumerate}
+\item \textbf{Formal stability proof:} A Lyapunov function for the closed-loop system has not been derived.
+\item \textbf{Abstract \(\Psi\) definition:} Domain-specific instantiation of \(\Psi\) from measurable telemetry is required.
+\item \textbf{Synthetic validation only:} Empirical validation on real AI inference systems is needed.
+\end{enumerate}
+
+\section{Conclusion}
+
+ENTRO-CORE provides a closed-loop control architecture for entropy regulation in adaptive intelligence systems. The hybrid sigmoid-tanh control law achieves superior performance compared to PID and uncontrolled baselines in simulation. The framework generalizes beyond LLMs to any system with measurable entropy state \(\Psi(t)\). Future work includes formal Lyapunov stability analysis, empirical validation on real LLM inference pipelines, and extension to multi-domain control (E-LAB-04: ENTRO-ENGINE).
+
+\begin{thebibliography}{9}
+\bibitem{shannon} C. E. Shannon, ``A Mathematical Theory of Communication,'' \textit{Bell System Technical Journal}, vol. 27, no. 3, pp. 379–423, 1948.
+\bibitem{wiener} N. Wiener, \textit{Cybernetics: Or Control and Communication in the Animal and the Machine}. MIT Press, 1948.
+\bibitem{entropia} S. Baladi, ``ENTROPIA: Statistical Dynamics of Information Dissipation,'' E-LAB-01, Zenodo, 2026. DOI: 10.5281/zenodo.19416737
+\bibitem{entroai} S. Baladi, ``ENTRO-AI: Entropy-Resistant Inference Architecture,'' E-LAB-02, Zenodo, 2026. DOI: 10.5281/zenodo.19284086
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use ENTRO-CORE in your research, please cite it as follows."
+title: "ENTRO-CORE: Self-Regulated Intelligence — Entropy Control in the Learning Core"
+authors:
+  - family-names: "Baladi"
+    given-names: "Samir"
+    orcid: "https://orcid.org/0009-0003-8903-0029"
+    affiliation: "Ronin Institute / Rite of Renaissance"
+    email: "gitdeeper@gmail.com"
+date-released: 2026-04-05
+version: 0.1.0
+doi: "10.5281/zenodo.19431029"
+license: "MIT"
+url: "https://entro-ai.netlify.app/entro-core"
+repository-code: "https://github.com/gitdeeper10/entro-core"
+keywords:
+  - entropy
+  - control-theory
+  - self-regulation
+  - artificial-intelligence
+  - stability
+  - E-LAB-03
+type: "software"
+abstract: "ENTRO-CORE moves entropy control from an external monitoring layer into the core learning algorithm itself, enabling AI systems to self-regulate their energy consumption and information processing as part of their physical nature."
+
+references:
+  - type: article
+    authors:
+      - family-names: "Baladi"
+        given-names: "Samir"
+    title: "ENTROPIA: Statistical Dynamics of Information Dissipation in Complex Non-Linear Digital Systems"
+    year: 2026
+    doi: "10.5281/zenodo.19416737"
+    notes: "E-LAB-01"
+  - type: software
+    authors:
+      - family-names: "Baladi"
+        given-names: "Samir"
+    title: "ENTRO-AI: Entropy-Resistant Inference Architecture"
+    year: 2026
+    version: "2.0.0"
+    notes: "E-LAB-02"
